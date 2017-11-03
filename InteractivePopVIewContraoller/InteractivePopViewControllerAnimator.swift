@@ -67,14 +67,15 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
             // Frames
             let frame = toViewController.view.frame
             let lineViewFrame = CGRect(x: 0, y: frame.height - tabBarRect.size.height - 0.5, width: tabBarRect.width, height: 0.5)
-            let imageViewFrame = CGRect(x: 0, y: frame.height - tabBarRect.size.height, width: tabBarRect.size.width, height: tabBarRect.size.height)
-            
+            let tabBarFrame = CGRect(x: 0, y: frame.height - tabBarRect.size.height, width: tabBarRect.width, height: tabBarRect.height)
+            let viewFrame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+
             // Declear the temporary view
             lineView = UIView(frame: lineViewFrame)
             lineView?.backgroundColor = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
-            tabBarImageView = UIImageView(frame: imageViewFrame)
+            tabBarImageView = UIImageView(frame: tabBarFrame)
             tabBarImageView?.image = tabBarScreenshot
-            previousViewImageView = UIImageView(frame: frame)
+            previousViewImageView = UIImageView(frame: viewFrame)
             previousViewImageView?.contentMode = .top
             previousViewImageView?.image = previousScreenshot
 
