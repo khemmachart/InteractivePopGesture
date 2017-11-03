@@ -114,13 +114,17 @@ extension SloppySwiper: SSWAnimatorDelegate {
             interactionController?.update(d)
 
         case .ended, .cancelled:
-            if recognizer.velocity(in: view).x > 0 {
+            let widthCondition = (interactionController?.percentComplete ?? 0) > 0.5
+            // let positionCondition = recognizer.location(in: view).x > 120
+            // let velocityCondition = recognizer.velocity(in: view).x > 0
+            
+            if widthCondition {
                 interactionController?.finish()
             } else {
-                interactionController?.cancel()
                 // When the transition is cancelled, `navigationController:didShowViewController:animated:`
                 // isn't called, so we have to maintain `duringAnimation`'s state here too.
                 duringAnimation = false
+                interactionController?.cancel()
             }
             interactionController = nil
 
