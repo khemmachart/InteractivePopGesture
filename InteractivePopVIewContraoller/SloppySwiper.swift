@@ -102,7 +102,7 @@ extension SloppySwiper: SSWAnimatorDelegate {
         case .began:
             if navigationController.viewControllers.count > 1 && !duringAnimation {
                 interactionController = UIPercentDrivenInteractiveTransition()
-                interactionController?.completionCurve = .easeOut
+                interactionController?.completionCurve = .linear
                 navigationController.popViewController(animated: true)
             }
 
