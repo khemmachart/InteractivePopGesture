@@ -73,19 +73,17 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
             lineView = UIView(frame: lineViewFrame)
             lineView?.backgroundColor = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
             tabBarImageView = UIImageView(frame: imageViewFrame)
+            tabBarImageView?.image = tabBarScreenshot
             previousViewImageView = UIImageView(frame: frame)
             previousViewImageView?.contentMode = .top
-            
+            previousViewImageView?.image = previousScreenshot
+
             // Fix UITableViewController position issue
             if let toTableViewController = toViewController as? UITableViewController {
                 let yPosition = toTableViewController.tableView.contentOffset.y + toTableViewController.view.frame.size.height - tabBarRect.size.height
                 lineView?.frame = CGRect(x: 0, y: yPosition - 0.5, width: tabBarRect.size.width, height: 0.5)
                 tabBarImageView?.frame = CGRect(x: 0, y: yPosition - tabBarRect.size.height, width: tabBarRect.size.width, height: tabBarRect.size.height)
             }
-
-            // Set the temporary image view
-            tabBarImageView?.image = tabBarScreenshot
-            previousViewImageView?.image = previousScreenshot
 
             // Add the temporary view as a subview
             if let previousViewImageView = previousViewImageView {
