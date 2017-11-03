@@ -54,12 +54,10 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         
         guard let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) else { return }
         guard let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
-        guard let toTabBarController = toViewController.tabBarController else { return }
-        guard let fromTabBarController = fromViewController.tabBarController else { return }
 
         // The tab bar conditions
-        let isPreviousViewHideTabBar = toTabBarController.tabBar.isHidden || toViewController.hidesBottomBarWhenPushed
-        let isPresentViewHideTabBar = fromTabBarController.tabBar.isHidden || fromViewController.hidesBottomBarWhenPushed
+        let isPreviousViewHideTabBar = isTabBarHidden(at: toViewController)
+        let isPresentViewHideTabBar = isTabBarHidden(at: fromViewController)
 
         // Temporary tab bar
         var lineView: UIView?
@@ -69,7 +67,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         // FIXED: The hidesBottomBarWhenPushed not animated properly.
         // This block gonna be executed only when the tabbat from present view controller is hidden
         // And the previous view controller (the view controller behide, toViewController) is shown
-        if !isPreviousViewHideTabBar && isPresentViewHideTabBar {
+        if let toTabBarController = toViewController.tabBarController, !isPreviousViewHideTabBar && isPresentViewHideTabBar {
 
             // Temporary views
             let previousScreenshot = getScreenShotFromView(view: toViewController.view)
@@ -153,7 +151,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             
             if !isPreviousViewHideTabBar {
-                toTabBarController.tabBar.isHidden = false
+                toViewController.tabBarController?.tabBar.isHidden = false
             }
         })
         
@@ -166,6 +164,13 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         let viewImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return viewImage!
+    }
+
+    private func isTabBarHidden(at viewController: UIViewController) -> Bool {
+        if let tabBarController = viewController.tabBarController {
+            return tabBarController.tabBar.isHidden || viewController.hidesBottomBarWhenPushed
+        }
+        return false
     }
 
     func animationEnded(_ transitionCompleted: Bool) {
