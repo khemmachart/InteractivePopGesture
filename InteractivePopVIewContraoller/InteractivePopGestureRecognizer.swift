@@ -23,30 +23,31 @@ class InteractivePopGestureRecognizer: UIPanGestureRecognizer {
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesMoved(touches, with: event)
-        
+
         guard state == .failed else { return }
         
         let velocity = self.velocity(in: view)
         
-        // check direction only on the first move
-        guard !dragging && !velocity.equalTo(CGPoint.zero) else { return }
-        
-        let velocities: [InteractivePanDirection: CGFloat] = [
-            .up :  -velocity.y,
-            .left: -velocity.x,
-            .down:  velocity.y,
-            .right: velocity.x,
-        ]
-        
-//
-//        NSArray *keysSorted = [velocities keysSortedByValueUsingSelector:@selector(compare:)];
-//
-//        // Fails the gesture if the highest velocity isn't in the same direction as `direction` property.
-//        if ([[keysSorted lastObject] integerValue] != self.direction) {
-//            self.state = UIGestureRecognizerStateFailed;
-//        }
-        
-        dragging = true
+        // Check direction only on the first move
+        if !dragging && !velocity.equalTo(CGPoint.zero) {
+            let velocities: [InteractivePanDirection: CGFloat] = [
+                .up :  -velocity.y,
+                .left: -velocity.x,
+                .down:  velocity.y,
+                .right: velocity.x,
+            ]
+            
+            print(velocities)
+    //
+    //        NSArray *keysSorted = [velocities keysSortedByValueUsingSelector:@selector(compare:)];
+    //
+    //        // Fails the gesture if the highest velocity isn't in the same direction as `direction` property.
+    //        if ([[keysSorted lastObject] integerValue] != self.direction) {
+    //            self.state = UIGestureRecognizerStateFailed;
+    //        }
+            
+            dragging = true
+        }
     }
 
     override func reset() {

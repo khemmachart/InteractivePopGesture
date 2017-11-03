@@ -10,41 +10,31 @@ import UIKit
 
 extension UIView {
     
-    func addLeftSideShadowWithFading() {
-        //    CGFloat shadowWidth = 4.0f;
-        //    CGFloat shadowVerticalPadding = -20.0f; // negative padding, so the shadow isn't rounded near the top and the bottom
-        //    CGFloat shadowHeight = CGRectGetHeight(self.frame) - 2 * shadowVerticalPadding;
-        //    CGRect shadowRect = CGRectMake(-shadowWidth, shadowVerticalPadding, shadowWidth, shadowHeight);
-        //    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:shadowRect];
-        //    self.layer.shadowPath = [shadowPath CGPath];
-        //    self.layer.shadowOpacity = 0.2f;
-        //
-        //    // fade shadow during transition
-        //    CGFloat toValue = 0.0f;
-        //    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-        //    animation.fromValue = @(self.layer.shadowOpacity);
-        //    animation.toValue = @(toValue);
-        //    [self.layer addAnimation:animation forKey:nil];
-        //    self.layer.shadowOpacity = toValue;
+    func addLeftSideShadow() {
+        let shadowWidth: CGFloat = 4.0
+        let shadowRect = CGRect(x: -shadowWidth, y: 0, width: shadowWidth, height: frame.height)
+        let shadowPath = UIBezierPath(rect: shadowRect)
+        layer.shadowPath = shadowPath.cgPath
+        layer.shadowOpacity = 0.2
     }
 }
 
-protocol SSWAnimatorDelegate: class {
-    func animatorShouldAnimateTabBar(animator: SSWAnimator) -> Bool
-    func animatorTransitionDimAmount(animator: SSWAnimator) -> CGFloat
+protocol InteractivePopViewControllerAnimatorDelegate: class {
+    func animatorShouldAnimateTabBar(animator: InteractivePopViewControllerAnimator) -> Bool
+    func animatorTransitionDimAmount(animator: InteractivePopViewControllerAnimator) -> CGFloat
 }
 
-class SSWAnimator: NSObject {
-    weak var delegate: SSWAnimatorDelegate?
+class InteractivePopViewControllerAnimator: NSObject {
+    weak var delegate: InteractivePopViewControllerAnimatorDelegate?
     weak var toViewController: UIViewController?
 }
 
-extension SSWAnimator: UIViewControllerAnimatedTransitioning {
+extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransitioning {
 
     // Approximated lengths of the default animations.
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         if let isInteractive = transitionContext?.isInteractive {
-            return isInteractive ? 0.25 : 0.25
+            return isInteractive ? 0.5 : 0.25
         }
         return 0
     }
@@ -56,8 +46,8 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         guard let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
 
         // The tab bar conditions
-        let isPreviousViewHideTabBar = isTabBarHidden(at: toViewController)
-        let isPresentViewHideTabBar = isTabBarHidden(at: fromViewController)
+        let isToViewControllerHidesTabBar = isTabBarHidden(at: toViewController)
+        let isFromViewControllerHidesTabBar = isTabBarHidden(at: fromViewController)
 
         // Temporary tab bar
         var lineView: UIView?
@@ -67,7 +57,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         // FIXED: The hidesBottomBarWhenPushed not animated properly.
         // This block gonna be executed only when the tabbat from present view controller is hidden
         // And the previous view controller (the view controller behide, toViewController) is shown
-        if let toTabBarController = toViewController.tabBarController, !isPreviousViewHideTabBar && isPresentViewHideTabBar {
+        if let toTabBarController = toViewController.tabBarController, !isToViewControllerHidesTabBar && isFromViewControllerHidesTabBar {
 
             // Temporary views
             let previousScreenshot = getScreenShotFromView(view: toViewController.view)
@@ -118,7 +108,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         
         // Add a shadow on the left side of the frontmost view controller
         let previousClipsToBounds = fromViewController.view.clipsToBounds
-        fromViewController.view.addLeftSideShadowWithFading()
+        fromViewController.view.addLeftSideShadow()
         fromViewController.view.clipsToBounds = false
 
         // In the default transition the view controller below is a little dimmer than the frontmost one
@@ -150,13 +140,22 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
             fromViewController.view.clipsToBounds = previousClipsToBounds
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             
-            if !isPreviousViewHideTabBar {
+            if !isToViewControllerHidesTabBar {
                 toViewController.tabBarController?.tabBar.isHidden = false
             }
         })
         
         self.toViewController = toViewController;
     }
+
+    func animationEnded(_ transitionCompleted: Bool) {
+        // Restore the toViewController's transform if the animation was cancelled
+        if !transitionCompleted {
+            toViewController?.view.transform = CGAffineTransform.identity
+        }
+    }
+
+    // MARK: - Utils
 
     private func getScreenShotFromView(view: UIView) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, true, UIScreen.main.scale)
@@ -165,18 +164,11 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         UIGraphicsEndImageContext()
         return viewImage!
     }
-
+    
     private func isTabBarHidden(at viewController: UIViewController) -> Bool {
         if let tabBarController = viewController.tabBarController {
             return tabBarController.tabBar.isHidden || viewController.hidesBottomBarWhenPushed
         }
         return false
-    }
-
-    func animationEnded(_ transitionCompleted: Bool) {
-        // restore the toViewController's transform if the animation was cancelled
-        if (!transitionCompleted) {
-            self.toViewController?.view.transform = CGAffineTransform.identity
-        }
     }
 }

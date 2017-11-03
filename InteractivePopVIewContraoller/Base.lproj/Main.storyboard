@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7iR-d2-Flg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13770" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7iR-d2-Flg">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13770"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -67,10 +67,10 @@
             </objects>
             <point key="canvasLocation" x="3556" y="902.69865067466276"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Item-->
         <scene sceneID="oko-iJ-W4P">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bvZ-vH-p54" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bvZ-vH-p54" customClass="InteractiveNavigationController" customModule="InteractivePopVIewContraoller" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="5e8-q1-fHZ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="MVb-F6-bfO">
@@ -79,16 +79,10 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <outlet property="delegate" destination="qt2-qo-Nyx" id="JMD-X7-GHb"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="Mon-LZ-fxX"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="koE-fN-Jg6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="qt2-qo-Nyx" customClass="SloppySwiper" customModule="InteractivePopVIewContraoller" customModuleProvider="target">
-                    <connections>
-                        <outlet property="navigationController" destination="bvZ-vH-p54" id="pIh-pi-t2o"/>
-                    </connections>
-                </customObject>
             </objects>
             <point key="canvasLocation" x="79" y="119"/>
         </scene>
@@ -153,9 +147,11 @@
         <!--Tab Bar Controller-->
         <scene sceneID="gIL-fR-rQY">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lve-en-gLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="7iR-d2-Flg" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="WkP-b4-2Xw">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
@@ -164,14 +160,13 @@
                         <segue destination="QBl-Hm-Oj5" kind="relationship" relationship="viewControllers" id="bKK-Zn-0gl"/>
                     </connections>
                 </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lve-en-gLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1810" y="1492"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Item-->
         <scene sceneID="W66-Oq-ege">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QBl-Hm-Oj5" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QBl-Hm-Oj5" customClass="InteractiveNavigationController" customModule="InteractivePopVIewContraoller" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="QOO-sd-LLs"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OZd-tr-mqK">
@@ -180,16 +175,10 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <outlet property="delegate" destination="wJ3-dv-asR" id="sT2-DY-Lfy"/>
                         <segue destination="ECp-ey-g0w" kind="relationship" relationship="rootViewController" id="cLs-1D-cOP"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OaD-eW-DTn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="wJ3-dv-asR" customClass="SloppySwiper" customModule="InteractivePopVIewContraoller" customModuleProvider="target">
-                    <connections>
-                        <outlet property="navigationController" destination="QBl-Hm-Oj5" id="Vg7-7K-qzf"/>
-                    </connections>
-                </customObject>
             </objects>
             <point key="canvasLocation" x="78" y="976"/>
         </scene>

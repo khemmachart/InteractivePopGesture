@@ -8,111 +8,76 @@
 
 import UIKit
 
-protocol SloppySwiperDelegate: class {
-
-    // Return NO when you don't want the TabBar to animate during swiping. (Default YES)
-    func sloppySwiperShouldAnimateTabBar(swiper: SloppySwiper) -> Bool
-
-    // 0.0 means no dimming, 1.0 means pure black. Default is 0.1
-    func sloppySwiperTransitionDimAmount(swiper: SloppySwiper) -> CGFloat
-}
-
 /**
- *  `SloppySwiper` is a class conforming to `UINavigationControllerDelegate` protocol that allows pan back gesture to be started from anywhere on the screen (not only from the left edge).
+ * InteractiveNavigationController conforming to `UINavigationControllerDelegate` protocol that
+ * allows pan back gesture to be started from anywhere on the screen (not only from the left edge).
  */
-class SloppySwiper: NSObject {
+class InteractiveNavigationController: UINavigationController {
     
-    @IBOutlet weak var navigationController: UINavigationController!
-    
-    lazy var panRecognizer: UIPanGestureRecognizer = {
-        let panRecognizer = InteractivePopGestureRecognizer(target: self, action: #selector(pan))
+    override var interactivePopGestureRecognizer: UIGestureRecognizer? {
+        return panRecognizer
+    }
+
+    private lazy var panRecognizer: UIPanGestureRecognizer = {
+        let panRecognizer = InteractivePopGestureRecognizer(target: self, action: #selector(handleGesture))
         panRecognizer.direction = .right
         panRecognizer.maximumNumberOfTouches = 1
         panRecognizer.delegate = self
         return panRecognizer
     }()
-    
-    lazy var animator: SSWAnimator = {
-        let animator = SSWAnimator()
+
+    lazy var animator: InteractivePopViewControllerAnimator = {
+        let animator = InteractivePopViewControllerAnimator()
         animator.delegate = self
         return animator
     }()
+
+    fileprivate var interactionController: UIPercentDrivenInteractiveTransition?
+    fileprivate var duringAnimation: Bool = false
     
-    weak var delegate: SloppySwiperDelegate?
-    var interactionController: UIPercentDrivenInteractiveTransition?
-    
-    // A Boolean value that indicates whether the navigation controller
-    // is currently animating a push/pop operation.
-    var duringAnimation: Bool = false
-
-    init(navigationController: UINavigationController) {
-        super.init()
-        self.navigationController = navigationController
-        addGestureRecognizer()
-    }
-
-    override init() {
-        super.init()
-        addGestureRecognizer()
-    }
-
-    deinit {
-        panRecognizer.removeTarget(self, action: #selector(pan))
-        navigationController.view.removeGestureRecognizer(panRecognizer)
-    }
+    // MARK: - Initialization
 
     override func awakeFromNib() {
         super.awakeFromNib()
         addGestureRecognizer()
+        addNavigationControllerDelegate()
     }
 
-    func addGestureRecognizer() {
-        if navigationController != nil {
-            navigationController.view.addGestureRecognizer(panRecognizer)
-        }
+    deinit {
+        panRecognizer.removeTarget(self, action: #selector(handleGesture(recognizer:)))
+        view.removeGestureRecognizer(panRecognizer)
     }
-}
 
-// MARK: - SSWAnimatorDelegate
-
-extension SloppySwiper: SSWAnimatorDelegate {
+    // MARK: - Utils
     
-    func animatorShouldAnimateTabBar(animator: SSWAnimator) -> Bool {
-        if let delegate = delegate {
-            return delegate.sloppySwiperShouldAnimateTabBar(swiper: self)
-        } else {
-            return true
-        }
+    func addGestureRecognizer() {
+        view.addGestureRecognizer(panRecognizer)
     }
 
-    func animatorTransitionDimAmount(animator: SSWAnimator) -> CGFloat {
-        if let delegate = delegate {
-            return delegate.sloppySwiperTransitionDimAmount(swiper: self)
-        } else {
-            return 0.25
-        }
+    func addNavigationControllerDelegate() {
+        delegate = self
     }
 
     // MARK: - UIPanGestureRecognizer
 
-    @objc func pan(recognizer: UIPanGestureRecognizer) {
-        let view = navigationController.view
-        switch recognizer.state {
+    @objc func handleGesture(recognizer: UIPanGestureRecognizer) {
 
+        switch recognizer.state {
+            
         case .began:
-            if navigationController.viewControllers.count > 1 && !duringAnimation {
+            if viewControllers.count > 1 && !duringAnimation {
                 interactionController = UIPercentDrivenInteractiveTransition()
                 interactionController?.completionCurve = .linear
-                navigationController.popViewController(animated: true)
+                popViewController(animated: true)
             }
-
+            
         case .changed:
             let translation = recognizer.translation(in: view)
             // Cumulative translation.x can be less than zero
             // because user can pan slightly to the right and then back to the left.
-            let d = translation.x > 0 ? translation.x / (view?.bounds.width ?? 0) : 0
+            let d = translation.x > 0 ? translation.x / view.bounds.width : 0
             interactionController?.update(d)
-
+            
         case .ended, .cancelled:
             let widthCondition = (interactionController?.percentComplete ?? 0) > 0.5
             // let positionCondition = recognizer.location(in: view).x > 120
@@ -127,25 +92,40 @@ extension SloppySwiper: SSWAnimatorDelegate {
                 interactionController?.cancel()
             }
             interactionController = nil
-
+            
         default:
             break
         }
     }
 }
 
+// MARK: - InteractivePopViewControllerAnimatorDelegate
+
+extension InteractiveNavigationController: InteractivePopViewControllerAnimatorDelegate {
+    
+    // Return false when you don't want the TabBar to animate during swiping.
+    func animatorShouldAnimateTabBar(animator: InteractivePopViewControllerAnimator) -> Bool {
+        return true
+    }
+
+    // 0.0 means no dimming, 1.0 means pure black.
+    func animatorTransitionDimAmount(animator: InteractivePopViewControllerAnimator) -> CGFloat {
+        return 0.25
+    }
+}
+
 // MARK: - UIGestureRecognizerDelegate
 
-extension SloppySwiper: UIGestureRecognizerDelegate {
+extension InteractiveNavigationController: UIGestureRecognizerDelegate {
 
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return navigationController.viewControllers.count > 1
+        return viewControllers.count > 1
     }
 }
 
 // MARK: - UINavigationControllerDelegate
 
-extension SloppySwiper: UINavigationControllerDelegate {
+extension InteractiveNavigationController: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if operation == UINavigationControllerOperation.pop {
