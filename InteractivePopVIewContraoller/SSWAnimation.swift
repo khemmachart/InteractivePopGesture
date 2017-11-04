@@ -158,12 +158,12 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         self.toViewController = toViewController;
     }
 
-    private func getScreenShotFromView(view: UIView) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, true, UIScreen.main.scale)
+    private func getScreenShotFromView(view: UIView) -> UIImage? {
+        UIGraphicsBeginImageContext(view.frame.size)
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let viewImage = UIGraphicsGetImageFromCurrentImageContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return viewImage!
+        return image
     }
 
     private func isTabBarHidden(at viewController: UIViewController) -> Bool {
