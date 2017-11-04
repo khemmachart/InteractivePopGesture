@@ -107,7 +107,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
             if let tabBarImageView = tabBarImageView {
                 toViewController.view.addSubview(tabBarImageView)
             }
-            toViewController.tabBarController?.tabBar.isHidden = true
+            toViewController.tabBarController?.tabBar.alpha = 0
         }
         
         transitionContext.containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
@@ -151,7 +151,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             
             if !isPreviousViewHideTabBar {
-                toViewController.tabBarController?.tabBar.isHidden = false
+                toViewController.tabBarController?.tabBar.alpha = 1
             }
         })
         
