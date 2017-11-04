@@ -19,31 +19,31 @@ extension UIView {
     }
 }
 
-protocol InteractivePopViewControllerAnimatorDelegate: class {
-    func animatorShouldAnimateTabBar(animator: InteractivePopViewControllerAnimator) -> Bool
-    func animatorTransitionDimAmount(animator: InteractivePopViewControllerAnimator) -> CGFloat
+protocol InteractivePopViewAnimatorDelegate: class {
+    func animatorShouldAnimateTabBar(animator: InteractivePopViewAnimator) -> Bool
+    func animatorTransitionDimAmount(animator: InteractivePopViewAnimator) -> CGFloat
 }
 
-class InteractivePopViewControllerAnimator: NSObject {
-    weak var delegate: InteractivePopViewControllerAnimatorDelegate?
+class InteractivePopViewAnimator: NSObject {
+    weak var delegate: InteractivePopViewAnimatorDelegate?
     weak var toViewController: UIViewController?
 }
 
-extension InteractivePopViewControllerAnimator {
+extension InteractivePopViewAnimator {
     enum duration: Double {
         case interactive = 0.3
         case noneInteractive = 0.25
     }
 }
 
-extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransitioning {
+extension InteractivePopViewAnimator: UIViewControllerAnimatedTransitioning {
 
     // Approximated lengths of the default animations.
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         if let isInteractive = transitionContext?.isInteractive {
             return isInteractive
-                ? InteractivePopViewControllerAnimator.duration.interactive.rawValue
-                : InteractivePopViewControllerAnimator.duration.noneInteractive.rawValue
+                ? InteractivePopViewAnimator.duration.interactive.rawValue
+                : InteractivePopViewAnimator.duration.noneInteractive.rawValue
         }
         return 0
     }

@@ -26,8 +26,8 @@ class InteractiveNavigationController: UINavigationController {
         return panRecognizer
     }()
 
-    lazy var animator: InteractivePopViewControllerAnimator = {
-        let animator = InteractivePopViewControllerAnimator()
+    lazy var animator: InteractivePopViewAnimator = {
+        let animator = InteractivePopViewAnimator()
         animator.delegate = self
         return animator
     }()
@@ -59,7 +59,7 @@ class InteractiveNavigationController: UINavigationController {
 
     // Set gesture to be enabled only when it completed animation
     // To perform, just using the animator duration to make a delay
-    private func turnPanRecognizerEnabled(afterDuration duration: InteractivePopViewControllerAnimator.duration) {
+    private func turnPanRecognizerEnabled(afterDuration duration: InteractivePopViewAnimator.duration) {
         let milliseconds = Int(duration.rawValue * 1000)
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(milliseconds), execute: {
             self.panRecognizer.isEnabled = true
@@ -110,17 +110,17 @@ class InteractiveNavigationController: UINavigationController {
     }
 }
 
-// MARK: - InteractivePopViewControllerAnimatorDelegate
+// MARK: - InteractivePopViewAnimatorDelegate
 
-extension InteractiveNavigationController: InteractivePopViewControllerAnimatorDelegate {
+extension InteractiveNavigationController: InteractivePopViewAnimatorDelegate {
     
     // Return false when you don't want the TabBar to animate during swiping.
-    func animatorShouldAnimateTabBar(animator: InteractivePopViewControllerAnimator) -> Bool {
+    func animatorShouldAnimateTabBar(animator: InteractivePopViewAnimator) -> Bool {
         return true
     }
 
     // 0.0 means no dimming, 1.0 means pure black.
-    func animatorTransitionDimAmount(animator: InteractivePopViewControllerAnimator) -> CGFloat {
+    func animatorTransitionDimAmount(animator: InteractivePopViewAnimator) -> CGFloat {
         return 0.25
     }
 }
