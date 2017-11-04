@@ -52,7 +52,6 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
         // Temporary tab bar
         var lineView: UIView?
         var tabBarImageView: UIImageView?
-        var previousViewImageView: UIImageView?
 
         // FIXED: The hidesBottomBarWhenPushed not animated properly.
         // This block gonna be executed only when the tabbat from present view controller is hidden
@@ -60,7 +59,6 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
         if let toTabBarController = toViewController.tabBarController, !isToViewControllerHidesTabBar && isFromViewControllerHidesTabBar {
 
             // Temporary views
-            let previousScreenshot = getScreenshot(from: toViewController.view)
             let tabBarScreenshot = getScreenshot(from: toTabBarController.tabBar)
             let tabBarRect = toTabBarController.tabBar.frame
             
@@ -68,16 +66,12 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
             let frame = toViewController.view.frame
             let lineViewFrame = CGRect(x: 0, y: frame.height - tabBarRect.size.height - 0.5, width: tabBarRect.width, height: 0.5)
             let tabBarFrame = CGRect(x: 0, y: frame.height - tabBarRect.size.height, width: tabBarRect.width, height: tabBarRect.height)
-            let viewFrame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
 
             // Declear the temporary view
             lineView = UIView(frame: lineViewFrame)
             lineView?.backgroundColor = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
             tabBarImageView = UIImageView(frame: tabBarFrame)
             tabBarImageView?.image = tabBarScreenshot
-            previousViewImageView = UIImageView(frame: viewFrame)
-            previousViewImageView?.contentMode = .top
-            previousViewImageView?.image = previousScreenshot
 
             // Fix UITableViewController position issue
             if let toTableViewController = toViewController as? UITableViewController {
@@ -87,9 +81,6 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
             }
 
             // Add the temporary view as a subview
-            if let previousViewImageView = previousViewImageView {
-                toViewController.view.addSubview(previousViewImageView)
-            }
             if let lineView = lineView {
                 toViewController.view.addSubview(lineView)
             }
@@ -137,7 +128,6 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
             dimmingView.removeFromSuperview()
             lineView?.removeFromSuperview()
             tabBarImageView?.removeFromSuperview()
-            previousViewImageView?.removeFromSuperview()
             
             fromViewController.view.transform = CGAffineTransform.identity
             fromViewController.view.clipsToBounds = previousClipsToBounds
