@@ -70,7 +70,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         if let toTabBarController = toViewController.tabBarController, !isPreviousViewHideTabBar && isPresentViewHideTabBar {
 
             // Temporary views
-            let tabBarScreenshot = getScreenShotFromView(view: toTabBarController.tabBar)
+            let tabBarScreenshot = getScreenshot(from: toTabBarController.tabBar)
             let tabBarRect = toTabBarController.tabBar.frame
             
             // Frames
@@ -148,7 +148,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         self.toViewController = toViewController;
     }
 
-    private func getScreenShotFromView(view: UIView) -> UIImage? {
+    private func getScreenshot(from view: UIView) -> UIImage? {
         UIGraphicsBeginImageContext(view.frame.size)
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
