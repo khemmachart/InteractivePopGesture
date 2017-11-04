@@ -33,7 +33,6 @@ class InteractiveNavigationController: UINavigationController {
     }()
 
     fileprivate var interactionController: UIPercentDrivenInteractiveTransition?
-    fileprivate var duringAnimation: Bool = false
     
     // MARK: - Initialization
 
@@ -58,6 +57,15 @@ class InteractiveNavigationController: UINavigationController {
         delegate = self
     }
 
+    // Set gesture to be enabled only when it completed animation
+    // To perform, just using the animator duration to make a delay
+    private func turnPanRecognizerEnabled(afterDuration duration: InteractivePopViewControllerAnimator.duration) {
+        let milliseconds = Int(duration.rawValue * 1000)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(milliseconds), execute: {
+            self.panRecognizer.isEnabled = true
+        })
+    }
+
     // MARK: - UIPanGestureRecognizer
 
     @objc func handleGesture(recognizer: UIPanGestureRecognizer) {
@@ -65,7 +73,7 @@ class InteractiveNavigationController: UINavigationController {
         switch recognizer.state {
             
         case .began:
-            if viewControllers.count > 1 && !duringAnimation {
+            if viewControllers.count > 1 {
                 interactionController = UIPercentDrivenInteractiveTransition()
                 interactionController?.completionCurve = .linear
                 popViewController(animated: true)
@@ -86,10 +94,13 @@ class InteractiveNavigationController: UINavigationController {
             if widthCondition {
                 interactionController?.finish()
             } else {
-                // When the transition is cancelled, `navigationController:didShowViewController:animated:`
-                // isn't called, so we have to maintain `duringAnimation`'s state here too.
-                duringAnimation = false
                 interactionController?.cancel()
+                // When the transition is cancelled, 'navigationController:didShowViewController:animated:'
+                // isn't called, so we have to maintain the gesture state here
+                panRecognizer.isEnabled = false
+                // If the the gesture turn to be enabled immediately,
+                // it might be caused the navitation bar title's bug
+                turnPanRecognizerEnabled(afterDuration: .interactive)
             }
             interactionController = nil
             
@@ -139,16 +150,7 @@ extension InteractiveNavigationController: UINavigationControllerDelegate {
         return interactionController
     }
 
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        if animated {
-            duringAnimation = true
-        }
-     }
-
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        
-        duringAnimation = false
-        
         if navigationController.viewControllers.count < 2 {
             panRecognizer.isEnabled = false
         } else {
