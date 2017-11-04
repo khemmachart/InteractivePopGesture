@@ -8,15 +8,6 @@
 
 import UIKit
 
-protocol SloppySwiperDelegate: class {
-
-    // Return NO when you don't want the TabBar to animate during swiping. (Default YES)
-    func sloppySwiperShouldAnimateTabBar(swiper: SloppySwiper) -> Bool
-
-    // 0.0 means no dimming, 1.0 means pure black. Default is 0.1
-    func sloppySwiperTransitionDimAmount(swiper: SloppySwiper) -> CGFloat
-}
-
 /**
  *  `SloppySwiper` is a class conforming to `UINavigationControllerDelegate` protocol that allows pan back gesture to be started from anywhere on the screen (not only from the left edge).
  */
@@ -38,7 +29,6 @@ class SloppySwiper: NSObject {
         return animator
     }()
     
-    weak var delegate: SloppySwiperDelegate?
     var interactionController: UIPercentDrivenInteractiveTransition?
     
     // A Boolean value that indicates whether the navigation controller
@@ -77,20 +67,14 @@ class SloppySwiper: NSObject {
 
 extension SloppySwiper: SSWAnimatorDelegate {
     
+    // Return false when you don't want the TabBar to animate during swiping.
     func animatorShouldAnimateTabBar(animator: SSWAnimator) -> Bool {
-        if let delegate = delegate {
-            return delegate.sloppySwiperShouldAnimateTabBar(swiper: self)
-        } else {
-            return true
-        }
+        return true
     }
 
+    // 0.0 means no dimming, 1.0 means pure black. Default is 0.25
     func animatorTransitionDimAmount(animator: SSWAnimator) -> CGFloat {
-        if let delegate = delegate {
-            return delegate.sloppySwiperTransitionDimAmount(swiper: self)
-        } else {
-            return 0.25
-        }
+        return 0.25
     }
 
     // MARK: - UIPanGestureRecognizer
