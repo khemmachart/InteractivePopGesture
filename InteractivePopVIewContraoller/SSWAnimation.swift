@@ -148,6 +148,15 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         self.toViewController = toViewController
     }
 
+    func animationEnded(_ transitionCompleted: Bool) {
+        // restore the toViewController's transform if the animation was cancelled
+        if (!transitionCompleted) {
+            self.toViewController?.view.transform = CGAffineTransform.identity
+        }
+    }
+
+    // MARK: - Utils
+
     private func getScreenshot(from view: UIView) -> UIImage? {
         UIGraphicsBeginImageContext(view.frame.size)
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
@@ -155,18 +164,11 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         UIGraphicsEndImageContext()
         return image
     }
-
+    
     private func isTabBarHidden(at viewController: UIViewController) -> Bool {
         if let tabBarController = viewController.tabBarController {
             return tabBarController.tabBar.isHidden || viewController.hidesBottomBarWhenPushed
         }
         return false
-    }
-
-    func animationEnded(_ transitionCompleted: Bool) {
-        // restore the toViewController's transform if the animation was cancelled
-        if (!transitionCompleted) {
-            self.toViewController?.view.transform = CGAffineTransform.identity
-        }
     }
 }
