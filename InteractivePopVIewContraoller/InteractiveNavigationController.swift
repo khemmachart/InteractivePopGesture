@@ -98,8 +98,8 @@ class InteractiveNavigationController: UINavigationController {
                 // When the transition is cancelled, 'navigationController:didShowViewController:animated:'
                 // isn't called, so we have to maintain the gesture state here
                 panRecognizer.isEnabled = false
-                // If the the gesture turn to be enabled immediately,
-                // it might be caused the navitation bar title's bug
+                // Resolved the navigation bar bug by adding the duration to enabled the gesture.
+                // Because swiping the view controller to fast might be caused of the bug
                 turnPanRecognizerEnabled(afterDuration: .interactive)
             }
             interactionController = nil
