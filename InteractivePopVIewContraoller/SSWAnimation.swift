@@ -11,21 +11,21 @@ import UIKit
 extension UIView {
     
     func addLeftSideShadowWithFading() {
-        //    CGFloat shadowWidth = 4.0f;
-        //    CGFloat shadowVerticalPadding = -20.0f; // negative padding, so the shadow isn't rounded near the top and the bottom
-        //    CGFloat shadowHeight = CGRectGetHeight(self.frame) - 2 * shadowVerticalPadding;
-        //    CGRect shadowRect = CGRectMake(-shadowWidth, shadowVerticalPadding, shadowWidth, shadowHeight);
-        //    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:shadowRect];
-        //    self.layer.shadowPath = [shadowPath CGPath];
-        //    self.layer.shadowOpacity = 0.2f;
+        //    CGFloat shadowWidth = 4.0f
+        //    CGFloat shadowVerticalPadding = -20.0f // negative padding, so the shadow isn't rounded near the top and the bottom
+        //    CGFloat shadowHeight = CGRectGetHeight(self.frame) - 2 * shadowVerticalPadding
+        //    CGRect shadowRect = CGRectMake(-shadowWidth, shadowVerticalPadding, shadowWidth, shadowHeight)
+        //    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:shadowRect]
+        //    self.layer.shadowPath = [shadowPath CGPath]
+        //    self.layer.shadowOpacity = 0.2f
         //
         //    // fade shadow during transition
-        //    CGFloat toValue = 0.0f;
-        //    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-        //    animation.fromValue = @(self.layer.shadowOpacity);
-        //    animation.toValue = @(toValue);
-        //    [self.layer addAnimation:animation forKey:nil];
-        //    self.layer.shadowOpacity = toValue;
+        //    CGFloat toValue = 0.0f
+        //    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"]
+        //    animation.fromValue = @(self.layer.shadowOpacity)
+        //    animation.toValue = @(toValue)
+        //    [self.layer addAnimation:animation forKey:nil]
+        //    self.layer.shadowOpacity = toValue
     }
 }
 
@@ -103,7 +103,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         
         transitionContext.containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
         
-        // Parallax effect; the offset matches the one used in the pop animation in iOS 7.1
+        // Parallax effect the offset matches the one used in the pop animation in iOS 7.1
         let toViewControllerXTranslation = -transitionContext.containerView.bounds.width * 0.3
         toViewController.view.transform = CGAffineTransform(translationX: toViewControllerXTranslation, y: 0)
         
@@ -120,7 +120,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
         toViewController.view.addSubview(dimmingView)
         
         // Uses linear curve for an interactive transition, so the view follows the finger. Otherwise, uses a navigation transition curve.
-        // UIViewAnimationOptions curveOption = [transitionContext isInteractive] ? UIViewAnimationOptionCurveLinear : SSWNavigationTransitionCurve;
+        // UIViewAnimationOptions curveOption = [transitionContext isInteractive] ? UIViewAnimationOptionCurveLinear : SSWNavigationTransitionCurve
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options: [.curveLinear], animations:{
             
@@ -145,7 +145,7 @@ extension SSWAnimator: UIViewControllerAnimatedTransitioning {
             }
         })
         
-        self.toViewController = toViewController;
+        self.toViewController = toViewController
     }
 
     private func getScreenshot(from view: UIView) -> UIImage? {
