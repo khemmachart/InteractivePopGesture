@@ -50,7 +50,7 @@
                                 <rect key="frame" x="164" y="350.5" width="46" height="30"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <segue destination="3z0-c0-S17" kind="push" id="wnj-aG-a0b"/>
+                                    <segue destination="jgm-4O-XnM" kind="push" id="NV0-9c-oDM"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -147,7 +147,6 @@
         <!--Tab Bar Controller-->
         <scene sceneID="gIL-fR-rQY">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lve-en-gLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="7iR-d2-Flg" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="WkP-b4-2Xw">
@@ -160,6 +159,7 @@
                         <segue destination="QBl-Hm-Oj5" kind="relationship" relationship="viewControllers" id="bKK-Zn-0gl"/>
                     </connections>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lve-en-gLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1810" y="1492"/>
         </scene>
@@ -182,8 +182,38 @@
             </objects>
             <point key="canvasLocation" x="78" y="976"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="pai-FS-Jk2">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="jgm-4O-XnM" customClass="ViewController" customModule="InteractivePopVIewContraoller" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fd7-r6-pUh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFE-st-Uj1">
+                                <rect key="frame" x="164" y="328.5" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="iMN-PM-Ksg" kind="push" id="7HL-Sh-3lF"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.99787038559999997" green="0.39610522990000002" blue="0.53206843140000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="dFE-st-Uj1" firstAttribute="centerX" secondItem="q4x-6A-vmp" secondAttribute="centerX" id="DT7-q6-GnD"/>
+                            <constraint firstItem="dFE-st-Uj1" firstAttribute="centerY" secondItem="q4x-6A-vmp" secondAttribute="centerY" id="Szs-aQ-hBp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="q4x-6A-vmp"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Q1L-eA-FN5"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sd7-Zw-n8i" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4374" y="904"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="RbD-YJ-4Gf"/>
+        <segue reference="2zS-SR-ZCK"/>
     </inferredMetricsTieBreakers>
 </document>

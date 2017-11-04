@@ -60,8 +60,8 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
         if let toTabBarController = toViewController.tabBarController, !isToViewControllerHidesTabBar && isFromViewControllerHidesTabBar {
 
             // Temporary views
-            let previousScreenshot = getScreenShotFromView(view: toViewController.view)
-            let tabBarScreenshot = getScreenShotFromView(view: toTabBarController.tabBar)
+            let previousScreenshot = getScreenshot(from: toViewController.view)
+            let tabBarScreenshot = getScreenshot(from: toTabBarController.tabBar)
             let tabBarRect = toTabBarController.tabBar.frame
             
             // Frames
@@ -96,13 +96,17 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
             if let tabBarImageView = tabBarImageView {
                 toViewController.view.addSubview(tabBarImageView)
             }
-            toViewController.tabBarController?.tabBar.isHidden = true
+            // FIXED: We have to use alpha instead of hidden.
+            // Hidden tabBar might effect to the main view frame and the tabBar background color
+            toViewController.tabBarController?.tabBar.alpha = 0
         }
         
         transitionContext.containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
         
-        // Parallax effect; the offset matches the one used in the pop animation in iOS 7.1
+        // Parallax effect the offset matches the one used in the pop animation in iOS 7.1
         let toViewControllerXTranslation = -transitionContext.containerView.bounds.width * 0.3
+        toViewController.view.bounds = transitionContext.containerView.bounds
+        toViewController.view.center = transitionContext.containerView.center
         toViewController.view.transform = CGAffineTransform(translationX: toViewControllerXTranslation, y: 0)
         
         // Add a shadow on the left side of the frontmost view controller
@@ -118,7 +122,7 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
         toViewController.view.addSubview(dimmingView)
         
         // Uses linear curve for an interactive transition, so the view follows the finger. Otherwise, uses a navigation transition curve.
-        // UIViewAnimationOptions curveOption = [transitionContext isInteractive] ? UIViewAnimationOptionCurveLinear : SSWNavigationTransitionCurve;
+        // UIViewAnimationOptions curveOption = [transitionContext isInteractive] ? UIViewAnimationOptionCurveLinear : SSWNavigationTransitionCurve
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options: [.curveLinear], animations:{
             
@@ -140,11 +144,11 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             
             if !isToViewControllerHidesTabBar {
-                toViewController.tabBarController?.tabBar.isHidden = false
+                toViewController.tabBarController?.tabBar.alpha = 1
             }
         })
         
-        self.toViewController = toViewController;
+        self.toViewController = toViewController
     }
 
     func animationEnded(_ transitionCompleted: Bool) {
@@ -156,12 +160,12 @@ extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransiti
 
     // MARK: - Utils
 
-    private func getScreenShotFromView(view: UIView) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, true, UIScreen.main.scale)
+    private func getScreenshot(from view: UIView) -> UIImage? {
+        UIGraphicsBeginImageContext(view.frame.size)
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let viewImage = UIGraphicsGetImageFromCurrentImageContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return viewImage!
+        return image
     }
     
     private func isTabBarHidden(at viewController: UIViewController) -> Bool {
