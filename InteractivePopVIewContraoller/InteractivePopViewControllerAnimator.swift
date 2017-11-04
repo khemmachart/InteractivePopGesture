@@ -29,12 +29,21 @@ class InteractivePopViewControllerAnimator: NSObject {
     weak var toViewController: UIViewController?
 }
 
+extension InteractivePopViewControllerAnimator {
+    enum duration: Double {
+        case interactive = 0.3
+        case noneInteractive = 0.25
+    }
+}
+
 extension InteractivePopViewControllerAnimator: UIViewControllerAnimatedTransitioning {
 
     // Approximated lengths of the default animations.
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         if let isInteractive = transitionContext?.isInteractive {
-            return isInteractive ? 0.5 : 0.25
+            return isInteractive
+                ? InteractivePopViewControllerAnimator.duration.interactive.rawValue
+                : InteractivePopViewControllerAnimator.duration.noneInteractive.rawValue
         }
         return 0
     }
