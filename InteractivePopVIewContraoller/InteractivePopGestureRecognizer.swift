@@ -24,7 +24,7 @@ class InteractivePopGestureRecognizer: UIPanGestureRecognizer {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesMoved(touches, with: event)
 
-        guard state == .failed else { return }
+        guard state != .failed else { return }
         
         let velocity = self.velocity(in: view)
         
@@ -36,16 +36,16 @@ class InteractivePopGestureRecognizer: UIPanGestureRecognizer {
                 .down:  velocity.y,
                 .right: velocity.x,
             ]
-            
-            print(velocities)
-    //
-    //        NSArray *keysSorted = [velocities keysSortedByValueUsingSelector:@selector(compare:)];
-    //
-    //        // Fails the gesture if the highest velocity isn't in the same direction as `direction` property.
-    //        if ([[keysSorted lastObject] integerValue] != self.direction) {
-    //            self.state = UIGestureRecognizerStateFailed;
-    //        }
-            
+    
+            // Finding the pan direction from highest velocity
+            let maxValue = velocities.values.max()
+            let keyStore = velocities.filter({ $0.value == maxValue }).first?.key
+
+            // Fails the gesture if the highest velocity isn't in the same direction as `direction` property.
+            if let direction = keyStore, direction != self.direction {
+                state = .failed
+            }
+
             dragging = true
         }
     }
