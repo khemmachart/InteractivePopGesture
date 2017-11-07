@@ -28,7 +28,6 @@ class InteractiveNavigationController: UINavigationController {
 
     lazy var animator: InteractivePopViewAnimator = {
         let animator = InteractivePopViewAnimator()
-        animator.delegate = self
         return animator
     }()
 
@@ -107,21 +106,6 @@ class InteractiveNavigationController: UINavigationController {
         default:
             break
         }
-    }
-}
-
-// MARK: - InteractivePopViewAnimatorDelegate
-
-extension InteractiveNavigationController: InteractivePopViewAnimatorDelegate {
-    
-    // Return false when you don't want the TabBar to animate during swiping.
-    func animatorShouldAnimateTabBar(animator: InteractivePopViewAnimator) -> Bool {
-        return true
-    }
-
-    // 0.0 means no dimming, 1.0 means pure black.
-    func animatorTransitionDimAmount(animator: InteractivePopViewAnimator) -> CGFloat {
-        return 0.25
     }
 }
 

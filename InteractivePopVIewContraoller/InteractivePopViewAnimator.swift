@@ -8,13 +8,7 @@
 
 import UIKit
 
-protocol InteractivePopViewAnimatorDelegate: class {
-    func animatorShouldAnimateTabBar(animator: InteractivePopViewAnimator) -> Bool
-    func animatorTransitionDimAmount(animator: InteractivePopViewAnimator) -> CGFloat
-}
-
 class InteractivePopViewAnimator: NSObject {
-    weak var delegate: InteractivePopViewAnimatorDelegate?
     weak var toViewController: UIViewController?
 }
 
@@ -104,10 +98,9 @@ extension InteractivePopViewAnimator: UIViewControllerAnimatedTransitioning {
         fromViewController.view.clipsToBounds = false
 
         // In the default transition the view controller below is a little dimmer than the frontmost one
-        let defaultDimAmount: CGFloat = 0.1
-        let dimAmount = delegate?.animatorTransitionDimAmount(animator: self)
+        let dimAmount: CGFloat = 0.25
         let dimmingView = UIView(frame: toViewController.view.bounds)
-        dimmingView.backgroundColor = UIColor(white: 0.0, alpha: dimAmount ?? defaultDimAmount)
+        dimmingView.backgroundColor = UIColor(white: 0.0, alpha: dimAmount)
         toViewController.view.addSubview(dimmingView)
         
         // Uses linear curve for an interactive transition, so the view follows the finger. Otherwise, uses a navigation transition curve.
