@@ -8,17 +8,6 @@
 
 import UIKit
 
-extension UIView {
-    
-    func addLeftSideShadow() {
-        let shadowWidth: CGFloat = 4.0
-        let shadowRect = CGRect(x: -shadowWidth, y: 0, width: shadowWidth, height: frame.height)
-        let shadowPath = UIBezierPath(rect: shadowRect)
-        layer.shadowPath = shadowPath.cgPath
-        layer.shadowOpacity = 0.2
-    }
-}
-
 protocol InteractivePopViewAnimatorDelegate: class {
     func animatorShouldAnimateTabBar(animator: InteractivePopViewAnimator) -> Bool
     func animatorTransitionDimAmount(animator: InteractivePopViewAnimator) -> CGFloat
