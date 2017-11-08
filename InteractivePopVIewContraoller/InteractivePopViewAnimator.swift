@@ -104,9 +104,8 @@ extension InteractivePopViewAnimator: UIViewControllerAnimatedTransitioning {
         toViewController.view.addSubview(dimmingView)
         
         // Uses linear curve for an interactive transition, so the view follows the finger. Otherwise, uses a navigation transition curve.
-        // UIViewAnimationOptions curveOption = [transitionContext isInteractive] ? UIViewAnimationOptionCurveLinear : SSWNavigationTransitionCurve
-        
-        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options: [.curveLinear], animations:{
+        let curveOption: UIViewAnimationOptions = transitionContext.isInteractive ? .curveLinear : .curveEaseInOut
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options: [curveOption], animations:{
             
             // Animate the previous and present views
             toViewController.view.transform = CGAffineTransform.identity
