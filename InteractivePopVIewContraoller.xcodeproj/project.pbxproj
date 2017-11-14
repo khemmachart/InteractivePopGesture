@@ -15,7 +15,7 @@
 		EAD4D4B01FAAE34C00109CD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAD4D4AF1FAAE34C00109CD5 /* Assets.xcassets */; };
 		EAD4D4B31FAAE34C00109CD5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAD4D4B11FAAE34C00109CD5 /* LaunchScreen.storyboard */; };
 		EAD4D4BE1FAAE34C00109CD5 /* InteractivePopVIewContraollerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4D4BD1FAAE34C00109CD5 /* InteractivePopVIewContraollerTests.swift */; };
-		EAD4D4C91FAAE3BA00109CD5 /* InteractivePopGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4D4C81FAAE3BA00109CD5 /* InteractivePopGestureRecognizer.swift */; };
+		EAD4D4C91FAAE3BA00109CD5 /* InteractiveGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4D4C81FAAE3BA00109CD5 /* InteractiveGestureRecognizer.swift */; };
 		EAD6B2751FB1B9620005B8C2 /* UIView+LeftSideShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD6B2741FB1B9620005B8C2 /* UIView+LeftSideShadow.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +42,7 @@
 		EAD4D4B91FAAE34C00109CD5 /* InteractivePopVIewContraollerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InteractivePopVIewContraollerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAD4D4BD1FAAE34C00109CD5 /* InteractivePopVIewContraollerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractivePopVIewContraollerTests.swift; sourceTree = "<group>"; };
 		EAD4D4BF1FAAE34C00109CD5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EAD4D4C81FAAE3BA00109CD5 /* InteractivePopGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractivePopGestureRecognizer.swift; sourceTree = "<group>"; };
+		EAD4D4C81FAAE3BA00109CD5 /* InteractiveGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveGestureRecognizer.swift; sourceTree = "<group>"; };
 		EAD6B2741FB1B9620005B8C2 /* UIView+LeftSideShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+LeftSideShadow.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,7 +87,7 @@
 			children = (
 				EAD4D4A81FAAE34C00109CD5 /* AppDelegate.swift */,
 				EAD4D4AA1FAAE34C00109CD5 /* ViewController.swift */,
-				EAD4D4C81FAAE3BA00109CD5 /* InteractivePopGestureRecognizer.swift */,
+				EAD4D4C81FAAE3BA00109CD5 /* InteractiveGestureRecognizer.swift */,
 				EA6B5F8A1FAAFEEA002FDB2E /* InteractiveNavigationController.swift */,
 				EA6B5F8C1FAB0074002FDB2E /* InteractivePopViewAnimator.swift */,
 				EAD6B2741FB1B9620005B8C2 /* UIView+LeftSideShadow.swift */,
@@ -213,7 +213,7 @@
 			files = (
 				EAD6B2751FB1B9620005B8C2 /* UIView+LeftSideShadow.swift in Sources */,
 				EA6B5F8D1FAB0074002FDB2E /* InteractivePopViewAnimator.swift in Sources */,
-				EAD4D4C91FAAE3BA00109CD5 /* InteractivePopGestureRecognizer.swift in Sources */,
+				EAD4D4C91FAAE3BA00109CD5 /* InteractiveGestureRecognizer.swift in Sources */,
 				EAD4D4AB1FAAE34C00109CD5 /* ViewController.swift in Sources */,
 				EA6B5F8B1FAAFEEA002FDB2E /* InteractiveNavigationController.swift in Sources */,
 				EAD4D4A91FAAE34C00109CD5 /* AppDelegate.swift in Sources */,

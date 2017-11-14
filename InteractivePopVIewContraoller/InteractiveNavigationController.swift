@@ -14,61 +14,63 @@ import UIKit
  */
 class InteractiveNavigationController: UINavigationController {
     
-    override var interactivePopGestureRecognizer: UIGestureRecognizer? {
-        return panRecognizer
-    }
-
-    private lazy var panRecognizer: UIPanGestureRecognizer = {
-        let panRecognizer = InteractivePopGestureRecognizer(target: self, action: #selector(handleGesture))
+    fileprivate lazy var panRecognizer: UIPanGestureRecognizer = {
+        let panRecognizer = InteractiveGestureRecognizer(target: self, action: #selector(handleGesture))
         panRecognizer.direction = .right
         panRecognizer.maximumNumberOfTouches = 1
         panRecognizer.delegate = self
         return panRecognizer
     }()
-
-    lazy var animator: InteractivePopViewAnimator = {
+    
+    fileprivate lazy var animator: InteractivePopViewAnimator = {
         let animator = InteractivePopViewAnimator()
         return animator
     }()
-
+    
+    fileprivate var isInteractivePopGestureRecognizerEnabled: Bool {
+        if let isEnabled = interactivePopGestureRecognizer?.isEnabled {
+            return isEnabled
+        }
+        return true
+    }
+    
     fileprivate var interactionController: UIPercentDrivenInteractiveTransition?
     
     // MARK: - Initialization
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         addGestureRecognizer()
         addNavigationControllerDelegate()
     }
-
+    
     deinit {
         panRecognizer.removeTarget(self, action: #selector(handleGesture(recognizer:)))
         view.removeGestureRecognizer(panRecognizer)
     }
-
+    
     // MARK: - Utils
     
     func addGestureRecognizer() {
         view.addGestureRecognizer(panRecognizer)
     }
-
+    
     func addNavigationControllerDelegate() {
         delegate = self
     }
-
-    // Set gesture to be enabled only when it completed animation
-    // To perform, just using the animator duration to make a delay
-    private func turnPanRecognizerEnabled(afterDuration duration: InteractivePopViewAnimator.duration) {
+    
+    // Enable the pan gesture when finished animation and the view controller has set interactive to be ture
+    private func enabledPanGestureRecognizer(afterDuration duration: InteractivePopViewAnimator.Duration) {
         let milliseconds = Int(duration.rawValue * 1000)
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(milliseconds), execute: {
-            self.panRecognizer.isEnabled = true
+            self.panRecognizer.isEnabled = true && self.isInteractivePopGestureRecognizerEnabled
         })
     }
-
+    
     // MARK: - UIPanGestureRecognizer
-
+    
     @objc func handleGesture(recognizer: UIPanGestureRecognizer) {
-
+        
         switch recognizer.state {
             
         case .began:
@@ -99,7 +101,7 @@ class InteractiveNavigationController: UINavigationController {
                 panRecognizer.isEnabled = false
                 // Resolved the navigation bar bug by adding the duration to enabled the gesture.
                 // Because swiping the view controller to fast might be caused of the bug
-                turnPanRecognizerEnabled(afterDuration: .interactive)
+                enabledPanGestureRecognizer(afterDuration: .interactive)
             }
             interactionController = nil
             
@@ -112,7 +114,7 @@ class InteractiveNavigationController: UINavigationController {
 // MARK: - UIGestureRecognizerDelegate
 
 extension InteractiveNavigationController: UIGestureRecognizerDelegate {
-
+    
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return viewControllers.count > 1
     }
@@ -124,21 +126,26 @@ extension InteractiveNavigationController: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if operation == UINavigationControllerOperation.pop {
-            return animator 
+            return animator
         } else {
             return nil
         }
     }
-
+    
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return interactionController
     }
-
+    
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        
+        // Keep the navigation bar hidden for the current view to calculate the view frame
+        animator.isFromViewControllerHidesNavigationBar = isNavigationBarHidden
+        
+        // Handle the pan recognizer enable, with the isInteractivePopGestureRecognizerEnabled from user
         if navigationController.viewControllers.count < 2 {
             panRecognizer.isEnabled = false
         } else {
-            panRecognizer.isEnabled = true
+            panRecognizer.isEnabled = true && isInteractivePopGestureRecognizerEnabled
         }
     }
 }

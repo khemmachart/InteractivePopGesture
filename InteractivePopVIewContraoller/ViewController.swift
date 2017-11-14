@@ -14,4 +14,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         title = "\(navigationController?.viewControllers.count ?? 0)"
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        if (navigationController?.viewControllers.count ?? 0) > 3 {
+            navigationController?.setNavigationBarHidden(true, animated: true)
+        } else {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+        }
+    }
 }
